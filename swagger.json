@@ -1,0 +1,135 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "API pentru gestionarea utilizatorilor și a produselor consumate",
+      "version": "1.0.0",
+      "title": "Health API"
+    },
+    "host": "localhost:5000",
+    "basePath": "/api",
+    "paths": {
+      "/auth/register": {
+        "post": {
+          "summary": "Înregistrare utilizator",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "body",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "password",
+              "in": "body",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Înregistrare realizată cu succes"
+            }
+          }
+        }
+      },
+      "/auth/login": {
+        "post": {
+          "summary": "Autentificare utilizator",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "body",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "password",
+              "in": "body",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Autentificare realizată cu succes"
+            }
+          }
+        }
+      },
+      "/products/add": {
+        "post": {
+          "summary": "Adaugă produs consumat",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "productId",
+              "in": "body",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "quantity",
+              "in": "body",
+              "required": true,
+              "type": "number"
+            },
+            {
+              "name": "date",
+              "in": "body",
+              "required": true,
+              "type": "string",
+              "format": "date-time"
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Produs adăugat cu succes"
+            }
+          }
+        }
+      },
+      "/products": {
+        "get": {
+          "summary": "Obține produsele consumate",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Produse consumate"
+            }
+          }
+        }
+      },
+      "/products/{id}": {
+        "delete": {
+          "summary": "Șterge un produs consumat",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Produs șters cu succes"
+            }
+          }
+        }
+      }
+    }
+}
+  
