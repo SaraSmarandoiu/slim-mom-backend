@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 
+
 const productSchema = new Schema({
     categories: [{ type: String }],
     weight: {
@@ -21,7 +22,7 @@ const productSchema = new Schema({
         4: { type: Boolean, required: true },
     },
 });
-productSchema.index({ 'title.ua': 'text', 'title.ru': 'text' });
+productSchema.index({ title: "text" });
 const Product = model("product", productSchema);
 
 module.exports = {

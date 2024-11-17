@@ -26,11 +26,13 @@ const getDailyRateUserController = async (req, res) => {
 const getAllProductsByQuery = async (req, res, next) => {
   const { query: { title, limit = 10 } } = req;
   const titleFromUrl = decodeURI(title).trim();
+  console.log("Searching for:", titleFromUrl); 
   const products = await Product.find({
     $or: [
       { $text: { $search: titleFromUrl } },
     ],
   }).limit(limit);
+  
   if (products.length === 0) {
     const newProducts = await Product.find({
       $or: [
