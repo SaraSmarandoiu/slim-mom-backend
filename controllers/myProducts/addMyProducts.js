@@ -5,7 +5,7 @@ const addMyProducts = async (req, res) => {
   const { _id } = req.user;
   const { productName, productWeight, date } = req.body;
   const productCalories = await countCalories(productName, productWeight);
-
+const owner = req.user.id;
   const product = await MyProducts.findOne({
     date,
     owner: _id,

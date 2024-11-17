@@ -21,7 +21,7 @@ const productSchema = new Schema({
         4: { type: Boolean, required: true },
     },
 });
-
+productSchema.index({ 'title.ua': 'text', 'title.ru': 'text' });
 const Product = model("product", productSchema);
 
 module.exports = {
