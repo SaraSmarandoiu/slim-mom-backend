@@ -5,13 +5,15 @@
     "title": "Calculator calorie",
     "description": "Application for calculating calories consumed per day",
     "license": {
-      "name": "MIT"
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
     }
   },
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "servers": [
     { "url": "http://localhost:3001" }
+    
   ],
   "tags": [
     {
