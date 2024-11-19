@@ -6,8 +6,6 @@ const { JWT_SECRET } = process.env;
 
 const auth = async (req, res, next) => {
     const { authorization = "" } = req.headers;
-
-    // Log pentru a verifica dacă header-ul de autorizare este transmis corect
     console.log("Authorization header: ", authorization);
 
     const [bearer, token] = authorization.split(" ");

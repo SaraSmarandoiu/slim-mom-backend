@@ -5,12 +5,10 @@ const addMyProducts = async (req, res) => {
   try {
     const { _id } = req.user;
     const { productName, productWeight, date } = req.body;
-
-    // Log pentru a verifica dacă datele sunt extrase corect
     console.log("Checking for existing product with: ", { date, owner: _id, productName });
 
     const productCalories = await countCalories(productName, productWeight);
-    const owner = req.user._id;  // De asemenea, folosește `_id`, așa cum ai făcut inițial
+    const owner = req.user._id; 
 
     const product = await MyProducts.findOne({
       date,
@@ -109,7 +107,6 @@ const addMyProducts = async (req, res) => {
   }
 };
 
-// console.log() trebuie să fie doar în interiorul funcției
 
 module.exports = {
   addMyProducts,
