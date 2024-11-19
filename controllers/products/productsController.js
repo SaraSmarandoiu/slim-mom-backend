@@ -36,7 +36,7 @@ const getAllProductsByQuery = async (req, res, next) => {
   if (products.length === 0) {
     const newProducts = await Product.find({
       $or: [
-        { 'title.ua': { $regex: titleFromUrl, $options: 'i' } },
+        { 'title': { $regex: titleFromUrl, $options: 'i' } },
       ],
     }).limit(limit);
 

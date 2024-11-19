@@ -3,7 +3,7 @@ const { NotFound } = require("http-errors");
 
 const countCalories = async (productName, productWeight) => {
   const product = await Product.findOne({
-    "title.ua": productName,
+    "title": productName,
   });
 
   if (!product) {

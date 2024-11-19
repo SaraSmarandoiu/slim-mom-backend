@@ -2,104 +2,114 @@ const { MyProducts } = require("../../models");
 const countCalories = require("./countCalories");
 
 const addMyProducts = async (req, res) => {
-  const { _id } = req.user;
-  const { productName, productWeight, date } = req.body;
-  const productCalories = await countCalories(productName, productWeight);
-const owner = req.user.id;
-  const product = await MyProducts.findOne({
-    date,
-    owner: _id,
-    productInfo: { $elemMatch: { productName } },
-  });
+  try {
+    const { _id } = req.user;
+    const { productName, productWeight, date } = req.body;
 
-  if (product) {
-    const index = product.productInfo.findIndex(
-      (product) => product.productName === productName
-    );
+    // Log pentru a verifica dacă datele sunt extrase corect
+    console.log("Checking for existing product with: ", { date, owner: _id, productName });
 
-    const newWeight =
-      Number(product.productInfo[index].productWeight) + Number(productWeight);
+    const productCalories = await countCalories(productName, productWeight);
+    const owner = req.user._id;  // De asemenea, folosește `_id`, așa cum ai făcut inițial
 
-    const newCalories =
-      Number(product.productInfo[index].productCalories) +
-      Number(productCalories);
-
-    await MyProducts.findOneAndUpdate(
-      { date, owner: _id },
-      {
-        $pull: {
-          productInfo: { productName },
-        },
-      }
-    );
-
-    await MyProducts.findOneAndUpdate(
-      { date, owner: _id },
-      {
-        $push: {
-          productInfo: {
-            $each: [
-              {
-                productCalories: newCalories.toString(),
-                productName,
-                productWeight: newWeight.toString(),
-              },
-            ],
-            $position: 0,
-          },
-        },
-      }
-    );
-
-    const newProduct = await MyProducts.findOne({
+    const product = await MyProducts.findOne({
       date,
-      owner: _id
-    })
+      owner: _id,
+      productInfo: { $elemMatch: { productName } },
+    });
 
-    return res.status(201).json({ success: "success", code: 201, newProduct });
-  }
+    if (product) {
+      const index = product.productInfo.findIndex(
+        (product) => product.productName === productName
+      );
 
-  if (await MyProducts.findOne({ date, owner: _id })) {
-    await MyProducts.findOneAndUpdate(
-      { date, owner: _id },
-      {
-        $push: {
-          productInfo: {
-            $each: [
-              {
-                productCalories,
-                productName,
-                productWeight,
-              },
-            ],
-            $position: 0,
+      const newWeight =
+        Number(product.productInfo[index].productWeight) + Number(productWeight);
+
+      const newCalories =
+        Number(product.productInfo[index].productCalories) +
+        Number(productCalories);
+
+      await MyProducts.findOneAndUpdate(
+        { date, owner: _id },
+        {
+          $pull: {
+            productInfo: { productName },
           },
-        },
-      }
-    );
+        }
+      );
 
-    const newProduct = await MyProducts.findOne({
+      await MyProducts.findOneAndUpdate(
+        { date, owner: _id },
+        {
+          $push: {
+            productInfo: {
+              $each: [
+                {
+                  productCalories: newCalories.toString(),
+                  productName,
+                  productWeight: newWeight.toString(),
+                },
+              ],
+              $position: 0,
+            },
+          },
+        }
+      );
+
+      const newProduct = await MyProducts.findOne({
+        date,
+        owner: _id,
+      });
+
+      return res.status(201).json({ success: "success", code: 201, newProduct });
+    }
+
+    if (await MyProducts.findOne({ date, owner: _id })) {
+      await MyProducts.findOneAndUpdate(
+        { date, owner: _id },
+        {
+          $push: {
+            productInfo: {
+              $each: [
+                {
+                  productCalories,
+                  productName,
+                  productWeight,
+                },
+              ],
+              $position: 0,
+            },
+          },
+        }
+      );
+
+      const newProduct = await MyProducts.findOne({
+        date,
+        owner: _id,
+      });
+
+      return res.status(201).json({ success: "success", code: 201, newProduct });
+    }
+
+    const newProduct = await MyProducts.create({
       date,
-      owner: _id
-    })
+      owner: _id,
+      productInfo: [{ productCalories, productName, productWeight }],
+    });
 
-    return res
-      .status(201)
-      .json({ success: "success", code: 201, newProduct });
+    return res.status(201).json({
+      success: "success",
+      code: 201,
+      newProduct,
+    });
+  } catch (error) {
+    console.error("Error in addMyProducts: ", error.message);
+    return res.status(500).json({ message: error.message });
   }
-
-  const newProduct = await MyProducts.create({
-    date,
-    owner: _id,
-    productInfo: [{ productCalories, productName, productWeight }],
-  });
-
-  return res.status(201).json({
-    success: "success",
-    code: 201,
-    newProduct
-  });
 };
+
+// console.log() trebuie să fie doar în interiorul funcției
 
 module.exports = {
   addMyProducts,

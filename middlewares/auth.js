@@ -2,10 +2,14 @@ const { Unauthorized } = require("http-errors");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 
-const {JWT_SECRET} = process.env;
+const { JWT_SECRET } = process.env;
 
 const auth = async (req, res, next) => {
     const { authorization = "" } = req.headers;
+
+    // Log pentru a verifica dacă header-ul de autorizare este transmis corect
+    console.log("Authorization header: ", authorization);
+
     const [bearer, token] = authorization.split(" ");
 
     try {
@@ -20,7 +24,7 @@ const auth = async (req, res, next) => {
         req.user = user;
         next();
     } catch (error) {
-        if (error.message === "Invalid sugnature") {
+        if (error.message === "Invalid signature") {
             error.status = 401;
         };
         next(error);
