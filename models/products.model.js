@@ -8,8 +8,7 @@ const productSchema = new Schema({
         required: true, 
     },
     title: {
-        ru: { type: String, required: true },
-        ua: { type: String, required: true },
+        type: String, required: true ,
     },
     calories: {
         type: Number,
