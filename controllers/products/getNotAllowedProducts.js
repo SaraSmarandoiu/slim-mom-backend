@@ -8,11 +8,16 @@ const getNotAllowedProducts = async bloodType => {
     const blood = [null, false, false, false, false];
     blood[bloodType] = true;
 
-    const products = await Product.find({
-        groupBloodNotAllowed: { $all: [blood] },
-    });
+    try {
+        const products = await Product.find({
+            groupBloodNotAllowed: { $all: [blood] }, 
+        });
 
-    return products;
+        return products;
+    } catch (error) {
+        console.error('Error fetching not allowed products:', error);
+        throw new Error('Error fetching products');
+    }
 };
 
 module.exports = getNotAllowedProducts;
