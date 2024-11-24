@@ -2,27 +2,21 @@ const getNotAllowedProducts = require("./getNotAllowedProducts");
 
 const notAllowedProductsObj = async bloodType => {
     const notAllowedProductsArray = await getNotAllowedProducts(bloodType);
-    
-    const arr = [];
-    notAllowedProductsArray.forEach(({ title }) => arr.push(title));
 
+    console.log('Not allowed products array:', notAllowedProductsArray);
+
+    const arr = notAllowedProductsArray.map(({ title }) => title);
+    
     let notAllowedProductsAll = [...new Set(arr)];
 
     const message = ['You can eat everything'];
-    let notAllowedProducts = [];
-
-    if (notAllowedProductsAll.length > 0) {
-        do {
-            const index = Math.floor(Math.random() * notAllowedProductsAll.length);
-            if (!notAllowedProducts.includes(notAllowedProductsAll[index])) {
-                notAllowedProducts.push(notAllowedProductsAll[index]);
-            }
-        } while (notAllowedProducts.length < 5);
-    } else {
+    if (notAllowedProductsAll.length === 0) {
         notAllowedProductsAll = message;
-        notAllowedProducts = message;
     }
-    const result = { notAllowedProductsAll, notAllowedProducts };
+
+    console.log('Final not allowed products:', notAllowedProductsAll);
+
+    const result = { notAllowedProductsAll, notAllowedProducts: notAllowedProductsAll };
     return result;
 };
 
