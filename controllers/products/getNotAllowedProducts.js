@@ -9,9 +9,12 @@ const getNotAllowedProducts = async bloodType => {
     blood[bloodType] = true;
 
     try {
+        console.log(`Fetching products for blood type: ${bloodType}`);
         const products = await Product.find({
             groupBloodNotAllowed: { $all: [blood] }, 
         });
+
+        console.log('Products found:', products);
 
         return products;
     } catch (error) {
