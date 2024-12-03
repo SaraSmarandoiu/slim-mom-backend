@@ -12,9 +12,9 @@
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "servers": [
-    { "url": "http://localhost:3001" }
-    
-  ],
+  { "url": "http://localhost:3001", "description": "Local server" },
+  { "url": "https://slim-mom-backend-1.onrender.com", "description": "Production server" }
+],
   "tags": [
     {
       "name": "Auth",
