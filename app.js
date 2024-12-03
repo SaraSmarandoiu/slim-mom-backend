@@ -20,11 +20,15 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+// Adăugare rută pentru rădăcină
+app.get("/", (req, res) => {
+  res.json({ message: "Backend-ul funcționează!" });
+});
+
 app.use("/api/users", authRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/myProducts", myProductsRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 
 app.use((_, res) => res.status(404).json({ message: "Not Found" }));
 
