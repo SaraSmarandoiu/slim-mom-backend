@@ -20,10 +20,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-// Adăugare rută pentru rădăcină
-app.get("/", (req, res) => {
-  res.json({ message: "Backend-ul funcționează!" });
-});
+
 
 app.use("/api/users", authRouter);
 app.use("/api/products", productsRouter);
